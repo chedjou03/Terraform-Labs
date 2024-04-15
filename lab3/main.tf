@@ -18,9 +18,11 @@ resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
 
   tags = {
-    Name        = var.vpc_name
-    Environment = "demo_environment"
-    Terraform   = "true"
+    Name              = var.vpc_name
+    Environment       = "demo_environment"
+    Terraform         = "true"
+    Region            = data.aws_region.current.name
+    RegionDescription = data.aws_region.current.description
   }
 }
 
@@ -176,9 +178,21 @@ resource "aws_subnet" "variables-subnet" {
   }
 }
 
+# Terraform Data Block - Lookup Ubuntu 22.04
+data "aws_ami" "ubuntu_22_04" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+
+  owners = ["099720109477"]
+}
+
 
 resource "aws_instance" "web_server" {
-  ami           = "ami-079db87dc4c10ac91"
+  ami           = data.aws_ami.ubuntu_22_04.id
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public_subnets["public_subnet_1"].id
   tags = {

@@ -409,7 +409,7 @@ module "autoscaling" {
   create_lt = true
 
   image_id      = data.aws_ami.ubuntu_22_04.id
-  instance_type = "t3.micro"
+  instance_type = "t2.micro"
 
   tags_as_map = {
     Name = "Web EC2 Server 2"

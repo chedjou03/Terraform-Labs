@@ -417,6 +417,16 @@ module "autoscaling" {
 
 }
 
+# Terraform Resource Block - To Build EC2 instance in Public Subnet
+resource "aws_instance" "web_server_2" {
+  ami           = data.aws_ami.ubuntu_22_04.id
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.public_subnets["public_subnet_2"].id
+  tags = {
+    Name = "Web EC2 Server 3"
+  }
+}
+
 module "s3-bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "2.11.1"
@@ -442,6 +452,6 @@ output "public_ip_server_subnet_1" {
 
 output "asg_max_size" {
   value = module.autoscaling.autoscaling_group_max_size
-  
+
 }
 

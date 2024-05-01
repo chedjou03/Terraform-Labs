@@ -1,5 +1,13 @@
 terraform {
   required_version = ">= 1.0.0"
+  # backend "local" {
+  #   path = "terraform.tfstate"
+  # }
+  backend "s3" {
+    bucket = "my-terraform-state-simplicechedjou"
+    key    = "prod/aws_infrastructure"
+    region = "us-east-1"
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
